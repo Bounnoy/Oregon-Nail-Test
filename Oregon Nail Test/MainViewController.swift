@@ -11,23 +11,23 @@ import UIKit
 class MainViewController: UIViewController {    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // Change title of next view to the button's title.
         let destinationViewController = segue.destination
         if let typeViewController = destinationViewController as? TypeViewController,
             let newTitle = segue.identifier {
             typeViewController.pageTitle = newTitle.capitalized
         }
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 
 }
-

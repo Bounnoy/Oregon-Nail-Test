@@ -34,6 +34,8 @@ class QAViewController: UIViewController {
     @IBOutlet weak var dButton: UIButton!
     
     @IBAction func aButtonPressed(_ sender: UIButton) {
+        
+        // Check to see if user already selected an answer.
         if appMode.mode != QA.Mode.study && !userAnsweredAlready {
             userAnsweredAlready = true
             checkAnswer(aButton.currentTitle!,from: aButton)
@@ -41,6 +43,8 @@ class QAViewController: UIViewController {
     }
     
     @IBAction func bButtonPressed(_ sender: UIButton) {
+        
+        // Check to see if user already selected an answer.
         if appMode.mode != QA.Mode.study && !userAnsweredAlready {
             userAnsweredAlready = true
             checkAnswer(bButton.currentTitle!,from: bButton)
@@ -48,6 +52,8 @@ class QAViewController: UIViewController {
     }
     
     @IBAction func cButtonPressed(_ sender: UIButton) {
+        
+        // Check to see if user already selected an answer.
         if appMode.mode != QA.Mode.study && !userAnsweredAlready {
             userAnsweredAlready = true
             checkAnswer(cButton.currentTitle!,from: cButton)
@@ -55,6 +61,8 @@ class QAViewController: UIViewController {
     }
     
     @IBAction func dButtonPressed(_ sender: UIButton) {
+        
+        // Check to see if user already selected an answer.
         if appMode.mode != QA.Mode.study && !userAnsweredAlready {
             userAnsweredAlready = true
             checkAnswer(dButton.currentTitle!,from: dButton)
@@ -65,30 +73,18 @@ class QAViewController: UIViewController {
 
             // If answer is correct, execute below.
             if answer.contains(correctAnswer) {
+                
                 rightAnswers += 1
-                
                 sender.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                
-                /*
-                switch answer {
-                case "A":
-                    sender.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "B":
-                    bButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "C":
-                    cButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "D":
-                    dButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                default:
-                    break
-                }*/
+
                 
             // If answer is wrong, execute below.
             } else {
-                wrongAnswers += 1
                 
+                wrongAnswers += 1
                 sender.setTitleColor(UIColor.red, for: UIControlState(rawValue: 0))
                 
+                // Highlight the correct answer.
                 if (aButton.currentTitle?.contains(correctAnswer))! {
                     aButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
                 }
@@ -101,47 +97,10 @@ class QAViewController: UIViewController {
                 if (dButton.currentTitle?.contains(correctAnswer))! {
                     dButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
                 }
-                /*
-                switch correctAnswer {
-                case aButton.currentTitle!:
-                    aButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case bButton.currentTitle!:
-                    bButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case cButton.currentTitle!:
-                    cButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case dButton.currentTitle!:
-                    dButton.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                default:
-                    break
-                }*/
-                /*
-                switch answer {
-                case "A":
-                    aButton?.setTitleColor(UIColor.red, for: UIControlState(rawValue: 0))
-                case "B":
-                    bButton?.setTitleColor(UIColor.red, for: UIControlState(rawValue: 0))
-                case "C":
-                    cButton?.setTitleColor(UIColor.red, for: UIControlState(rawValue: 0))
-                case "D":
-                    dButton?.setTitleColor(UIColor.red, for: UIControlState(rawValue: 0))
-                default:
-                    break
-                }
-                
-                switch correctAnswer {
-                case "A":
-                    aButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "B":
-                    bButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "C":
-                    cButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                case "D":
-                    dButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
-                default:
-                    break
-                }*/
+
             }
         
+        // If there are more questions, make next button available.
         if counter < totalQuestions {
             nextButton?.isHidden = false
         }
@@ -154,18 +113,22 @@ class QAViewController: UIViewController {
     @IBAction func backButtonPressed(_ sender: UIButton) {
         counter -= 1
         
+        // If can't go back further, hide back button.
         if counter < 1 {
             backButton?.isHidden = true
         }
         
+        // Otherwise, show back button.
         if counter < totalQuestions {
             nextButton?.isHidden = false
         }
         
+        // Marker to indicate we're going back.
         if appMode.mode == QA.Mode.practice {
             previousQuestion = 1
         }
         
+        // Load previous question.
         userAnsweredAlready = false
         resetColors()
         start()
@@ -173,6 +136,7 @@ class QAViewController: UIViewController {
     
     @IBAction func exitButtonPressed(_ sender: UIButton) {
         
+        // If we're testing, show the results of the test.
         if appMode.mode == QA.Mode.test {
             let alertController = UIAlertController(title: "Test Results", message: "Right Answers = \(rightAnswers)\nWrong Answers = \(wrongAnswers)", preferredStyle: .alert)
             let defaultAction = UIAlertAction(title: "Exit", style: .default, handler: { action in self.performSegue(withIdentifier: "exit", sender: self)})
@@ -184,14 +148,17 @@ class QAViewController: UIViewController {
     @IBAction func nextButtonPressed(_ sender: UIButton) {
         counter += 1
         
+        // Show the next button.
         if counter > 0 {
             backButton?.isHidden = false
         }
         
+        // Hide the next button if we're at the end of the list.
         if counter >= totalQuestions {
             nextButton?.isHidden = true
         }
         
+        // Load next question in the test.
         if appMode.mode == QA.Mode.test {
             updateUI()
         }
@@ -207,6 +174,7 @@ class QAViewController: UIViewController {
         }
     }
     
+    // Reveal all buttons and labels according to app mode.
     private func updateUI() {
         titleLabel?.text = pageTitle
         
@@ -233,6 +201,7 @@ class QAViewController: UIViewController {
         dButton?.setTitleColor(UIColor.white, for: UIControlState(rawValue: 0))
     }
 
+    // This loads all the Oregon Law questions and choices.
     private func beginLaw() {
 
         switch appMode.mode {
@@ -247,6 +216,7 @@ class QAViewController: UIViewController {
             cButton.setTitle("C) \(current.C)", for: UIControlState(rawValue: 0))
             dButton.setTitle("D) \(current.D)", for: UIControlState(rawValue: 0))
             
+            // Display the correct answer.
             switch current.a {
             case "A":
                 aButton?.setTitleColor(UIColor.yellow, for: UIControlState(rawValue: 0))
@@ -259,15 +229,21 @@ class QAViewController: UIViewController {
             default:
                 break
             }
+            
         case .practice:
             totalQuestions = appMode.law.count
+            
+            // If back button was pressed, remove the last entry and reset flag.
             if previousQuestion > 0 {
                 previousQuestion = 0
                 practiceQuestions.removeLast()
+            
+            // Otherwise, pick a random question.
             } else {
                 practiceQuestions.append(Int(arc4random() % UInt32(totalQuestions)))
             }
             
+            // Store the correct answer since it's being randomized.
             let current = appMode.law[practiceQuestions.last!]
             let choice = [current.A,current.B,current.C,current.D]
             switch current.a {
@@ -285,6 +261,8 @@ class QAViewController: UIViewController {
             
             question?.text = "Q\(counter+1)) \(current.q)"
             
+            
+            // Randomize the multiple choices.
             var used = [Int]()
             var i: Int
             
@@ -314,12 +292,15 @@ class QAViewController: UIViewController {
             
 
         case .test:
+            
+            // Pick a random question and store it so we don't pick it again.
             var index: Int
             repeat {
                 index = Int(arc4random() % 100)
             } while alreadyUsedQuestions.contains(index)
             alreadyUsedQuestions.append(index)
             
+            // Store the correct answer since it's being randomized.
             let current = appMode.law[index]
             let choice = [current.A,current.B,current.C,current.D]
             switch current.a {
@@ -335,9 +316,10 @@ class QAViewController: UIViewController {
                 break
             }
             
-            totalQuestions = 100
-            question?.text = "Q\(counter+1)) \(current.q)"
+            totalQuestions = 100 // Oregon Law Test is only 100 questions, even though there's more.
+            question?.text = "Q\(counter+1)) \(current.q)" // Add number in front of the question.
             
+            // Randomize the multiple choice.
             var used = [Int]()
             var i: Int
             
@@ -366,7 +348,7 @@ class QAViewController: UIViewController {
             dButton.setTitle("D) \(choice[i])", for: UIControlState(rawValue: 0))
         }
         
-        // Unhide questions and choices when data has been loaded.
+        // Show all buttons and labels when data has been loaded.
         question?.isHidden = false
         aButton?.isHidden = false
         bButton?.isHidden = false
@@ -374,8 +356,9 @@ class QAViewController: UIViewController {
         dButton?.isHidden = false
     }
     
+    // This loads all the Oregon Nail Technology questions and answers.
     private func beginNail() {
-        
+        // Still need to write this one.
     }
     
     private func start() {
@@ -394,7 +377,6 @@ class QAViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }

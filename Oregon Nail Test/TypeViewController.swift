@@ -27,11 +27,15 @@ class TypeViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let destinationViewController = segue.destination
         if let qaViewController = destinationViewController as? QAViewController,
             let newTitle = segue.identifier {
+            
+            // Change title of next view to the button's title.
             qaViewController.pageTitle = "\(pageTitle): \(newTitle.capitalized)"
             
+            // Set the mode of next view.
             let index = pageTitle.lowercased() + newTitle
             if let appMode = qa[index] {
                 qaViewController.appMode = appMode
@@ -39,6 +43,7 @@ class TypeViewController: UIViewController {
         }
     }
     
+    // Configurations for the question and answer.
     private let qa: Dictionary<String,QA> = [
         "studylaw" : QA(mode: .study, type: .law),
         "studynail" :  QA(mode: .study, type: .nail),
@@ -50,24 +55,10 @@ class TypeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

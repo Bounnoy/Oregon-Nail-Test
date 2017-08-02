@@ -26,6 +26,7 @@ struct QA {
     let mode: Mode
     let type: TestType
     
+    // Hard coded the questions and answers. There's definitely a better way to write this, but don't really need to.
     let law: [(q: String, A: String, B: String, C: String, D: String, a: String)] = [
         (
             "...means a written authorization that allows a practitioner to practice outside or away from a licensed facility.",
